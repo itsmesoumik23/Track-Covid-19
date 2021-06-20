@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid-19 | Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Title', 'Data'],
+          ['New Cases',     <%= gnc %>],
+          ['Total Cases',      <%= gtc %>],
+          ['New Deaths',  <%= gnd %>],
+          ['Total Deaths', <%= gtd %>],
+          ['New Recovered',    <%= gnr %>],
+          ['Total Recovered', <%= gtr %>]
+        ]);
+
+        var CountryData = google.visualization.arrayToDataTable([
+            ['Title', 'Data'],
+            ['New Cases', <%= cnc %>],
+            ['Total Cases',      <%= ctc %>],
+            ['New Deaths',  <%= cnd %>],
+            ['Total Deaths', <%= ctd %>],
+            ['New Recovered',    <%= cnr %>],
+            ['Total Recovered', <%= ctr %>]
+        ])
+
+        var options = {
+          title: 'Covid Global Data',
+          backgroundColor: "transparent",
+          titleTextStyle: {color: 'white'},legendTextStyle: { color: 'white' }
+        };
+        var options2 = {
+            title: 'Covid Country Data', backgroundColor: 'transparent', titleTextStyle: {color: 'white'}, legendTextStyle: { color: 'white' }
+        }
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
+
+        chart.draw(data, options);
+        var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+        chart.draw(CountryData, options2);
+      }
+    </script>
+
+
+    
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center mt-5">Covid-19 Live Data</h1>
+
+        <h2>Global Data</h2>
+        <table class="table table-hover">
+            <div class="row">
+                <div class="col col-lg-6">
+                    <thead>
+                        <th>New Confirmed</th>
+                        <th>Total Confirmed</th>
+                        <th>New Deaths</th>
+                    </thead>
+                    <tbody>
+                        <tr id="mainData">
+                            <td> <%= gnc %>  </td>
+                            <td> <%= gtc %>  </td>
+                            <td> <%= gnd %>  </td>
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="col col-lg-6">
+                    <thead>
+                        <th>Total Deaths</th>
+                        <th>New Recovered</th>
+                        <th>Total Recovered</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> <%= gtd %>  </td>
+                            <td> <%= gnr %>  </td>
+                            <td> <%= gtr %>  </td>
+                        </tr>
+                    </tbody>
+                </div>
+            </div>
+            <br>
+        </table>
+    </div>
+
+    <div class="container" id="search-based">
+        <br><br>
+        <h2>Country Data</h2><br><br>   
+
+        <form action="/" method="post">
+            <input type="text" name="InputCountry" value="" placeholder="Type your country...">
+            <button class="btn btn-danger" type="submit" name="button">Search</button>
+            
+        </form>
+        <br>
+    <%    if (flag === 0){  %>
+        <h3><%=  countryName   %></h3><br>
+        <table class="table table-hover">
+            <div class="row">
+                <div class="col col-lg-6">
+                    <thead>
+                        <th>New Confirmed</th>
+                        <th>Total Confirmed</th>
+                        <th>New Deaths</th>
+                    </thead>
+                    <tbody>
+                        <tr id="mainData">
+                            <td> <%= cnc %>  </td>
+                            <td> <%= ctc %>  </td>
+                            <td> <%= cnd %>  </td>
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="col col-lg-6">
+                    <thead>
+                        <th>Total Deaths</th>
+                        <th>New Recovered</th>
+                        <th>Total Recovered</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> <%= ctd %>  </td>
+                            <td> <%= cnr %>  </td>
+                            <td> <%= ctr %>  </td>
+                        </tr>
+                    </tbody>
+                </div>
+            </div>
+
+        </table>
+    <%    }     %>
+    </div>
+    <div class="row">
+        <div id="piechart1" style="width: 600px; height: 600px;"></div>
+        <div id="piechart2" style="width: 600px; height: 600px; "></div>
+    </div>
+    
+
+    <footer>
+    <%    var year = new Date().getFullYear() %>
+    <p>Copyright © <%= year %> | Made by Soumik Mukherjee</p>
+    </footer>
+</body>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</html>
