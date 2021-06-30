@@ -8,8 +8,9 @@ app.use(favicon(__dirname + '/public/css/favicon.png'));
 
 var nc=""
 var flag;
+var CN = ""
 var searchMiss = false;
-var countryTotalConfirmed, countryTotalDeaths, countryTotalRecovered, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered;
+var countryTotalConfirmed, countryTotalDeaths, countryTotalRecovered, globalTotalConfirmed=0, globalTotalDeaths=0, globalTotalRecovered=0;
 
 app.set('view engine', 'ejs');
 
@@ -17,76 +18,79 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static("public"))
 
 
-
 app.get("/", function(req, res){
 
-    var request = https.request('https://api.covid19api.com/summary', function(response){
-        var chunks = []
+    https.get('https://www.trackcorona.live/api/countries', function(response){
+        // var chunks = []
+        var Items = ''
         
-        response.on("data", function(chunk){
-            chunks.push(chunk)
+        response.on("data", function(data){
+            Items += data;
         })
 
-        response.on("end", function(chunk){
-            var body = Buffer.concat(chunks)
+        response.on("end", function(){
+            // const body = Buffer.concat(chunks)
             try{
-                data = JSON.parse(body)
+                var mainData = JSON.parse(Items)
+                var j = 0
+                
+                while (j < 230){
+                    globalTotalConfirmed = globalTotalConfirmed + mainData.data[j].confirmed
+                    globalTotalDeaths = globalTotalDeaths + mainData.data[j].dead
+                    globalTotalRecovered = globalTotalRecovered + mainData.data[j].recovered
+                    j = j+1
+                }
+                console.log(mainData.data.length, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered);
+
+                var i = 0;
+                if (nc !== ""){
+                    while (i < 230) {
+                        if ((mainData.data[i].location).toLowerCase().indexOf(nc.toLowerCase()) !== -1){
+                            flag = 0;
+                            breakCalled=true
+                            break
+                        }
+                        i = i + 1;
+                    }
+                }
+                if (i === 230){
+                    i = 0;
+                    searchMiss = true;
+                }
+
+                // const countryNewConfirmed = data.Countries[i].NewConfirmed
+                countryTotalConfirmed = mainData.data[i].confirmed
+                // const countryNewDeaths = data.Countries[i].NewDeaths
+                countryTotalDeaths = mainData.data[i].dead
+                // const countryNewRecovered = data.Countries[i].NewRecovered
+                countryTotalRecovered = mainData.data[i].recovered
+                const CN = mainData.data[i].location
+                if (nc !== ""){
+                    nc = ""
+                    i = 0
+                    if (searchMiss === false){
+                    res.render("list", {searchMiss: searchMiss , flag:flag, countryName: CN , gtc: globalTotalConfirmed, gtd: globalTotalDeaths, gtr: globalTotalRecovered, ctc: countryTotalConfirmed, ctd: countryTotalDeaths, ctr: countryTotalRecovered })
+                    searchMiss = false
+                    flag=-1
+                    } else {
+                        res.render("list", {searchMiss: searchMiss , flag:flag, countryName: CN , gtc: globalTotalConfirmed, gtd: globalTotalDeaths, gtr: globalTotalRecovered, ctc: "", ctd: "", ctr: ""})
+                        flag=-1
+                        searchMiss = false
+
+                    }
+                } else {
+                    nc = ""
+                    i = 0
+                    res.render("list", {searchMiss: searchMiss , flag:flag, countryName: "" , gtc: globalTotalConfirmed, gtd: globalTotalDeaths, gtr: globalTotalRecovered, ctc: "", ctd: "", ctr: "" })
+                    flag=-1
+            }
             } catch (error){
-                const data = body.toString()
+                const data = Items.toString()
                 console.log(data);
             }
             
 
-            const globalNewConfirmed = data.Global.NewConfirmed
-            const globalTotalConfirmed = data.Global.TotalConfirmed
-            const globalNewDeaths = data.Global.NewDeaths
-            const globalTotalDeaths = data.Global.TotalDeaths
-            const globalNewRecovered = data.Global.NewRecovered
-            const globalTotalRecovered = data.Global.TotalRecovered
-            console.log(data.Countries.length);
-
-            var i = 0;
-            if (nc !== ""){
-                while (i < 191) {
-                    if ((data.Countries[i].Slug).toLowerCase().indexOf(nc.toLowerCase()) !== -1){
-                        flag = 0;
-                        breakCalled=true
-                        break
-                    }
-                    i = i + 1;
-                }
-            }
-            if (i === 191){
-                i = 0;
-                searchMiss = true;
-            }
-
-//             const countryNewConfirmed = data.Countries[i].NewConfirmed
-            const countryTotalConfirmed = data.Countries[i].TotalConfirmed
-//             const countryNewDeaths = data.Countries[i].NewDeaths
-            const countryTotalDeaths = data.Countries[i].TotalDeaths
-//             const countryNewRecovered = data.Countries[i].NewRecovered
-            const countryTotalRecovered = data.Countries[i].TotalRecovered
-            const CN = data.Countries[i].Country
-            if (nc !== ""){
-                nc = ""
-                i = 0
-                if (searchMiss === false){
-                res.render("list", {searchMiss: searchMiss , flag:flag, countryName: CN , gnc: globalNewConfirmed, gtc: globalTotalConfirmed, gnd: globalNewDeaths, gtd: globalTotalDeaths, gnr: globalNewRecovered, gtr: globalTotalRecovered, cnc: countryNewConfirmed, ctc: countryTotalConfirmed, cnd: countryNewDeaths, ctd: countryTotalDeaths, cnr: countryNewRecovered, ctr: countryTotalRecovered })
-                searchMiss = false
-                flag=-1
-                } else {
-                    res.render("list", {searchMiss: searchMiss , flag:flag, countryName: CN , gnc: globalNewConfirmed, gtc: globalTotalConfirmed, gnd: globalNewDeaths, gtd: globalTotalDeaths, gnr: globalNewRecovered, gtr: globalTotalRecovered, cnc: "", ctc: "", cnd: "", ctd: "", cnr: "", ctr: ""})
-                    flag=-1
-                    searchMiss = false
-
-                }
-            } else {
-                nc = ""
-                i = 0
-                res.render("list", {searchMiss: searchMiss , flag:flag, countryName: "" , gnc: globalNewConfirmed, gtc: globalTotalConfirmed, gnd: globalNewDeaths, gtd: globalTotalDeaths, gnr: globalNewRecovered, gtr: globalTotalRecovered, cnc: "", ctc: "", cnd: "", ctd: "", cnr: "", ctr: "" })
-                flag=-1
-            }
+            
 
         })
 
@@ -94,8 +98,6 @@ app.get("/", function(req, res){
             console.log(error);
         })
     })
-    request.end()
-    // res.sendFile(__dirname+"/index.html")
     
 })
 
