@@ -9,7 +9,7 @@ app.use(favicon(__dirname + '/public/css/favicon.png'));
 var nc=""
 var flag;
 var searchMiss = false;
-var countryNewConfirmed, countryTotalConfirmed, countryNewDeaths, countryTotalDeaths, countryNewRecovered, countryTotalRecovered, globalNewConfirmed, globalTotalConfirmed, globalNewDeaths, globalTotalDeaths, globalNewRecovered, globalTotalRecovered;
+var countryTotalConfirmed, countryTotalDeaths, countryTotalRecovered, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered;
 
 app.set('view engine', 'ejs');
 
@@ -61,11 +61,11 @@ app.get("/", function(req, res){
                 searchMiss = true;
             }
 
-            const countryNewConfirmed = data.Countries[i].NewConfirmed
+//             const countryNewConfirmed = data.Countries[i].NewConfirmed
             const countryTotalConfirmed = data.Countries[i].TotalConfirmed
-            const countryNewDeaths = data.Countries[i].NewDeaths
+//             const countryNewDeaths = data.Countries[i].NewDeaths
             const countryTotalDeaths = data.Countries[i].TotalDeaths
-            const countryNewRecovered = data.Countries[i].NewRecovered
+//             const countryNewRecovered = data.Countries[i].NewRecovered
             const countryTotalRecovered = data.Countries[i].TotalRecovered
             const CN = data.Countries[i].Country
             if (nc !== ""){
