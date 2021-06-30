@@ -1,5 +1,6 @@
 body {
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    overflow-x: hidden;
   }
 
 h1{
@@ -25,8 +26,7 @@ html{
 }
 
 body{
-    background: rgb(171,171,171);
-background: linear-gradient(0deg, rgba(171,171,171,1) 0%, rgba(0,0,0,0.9556197478991597) 40%, rgba(99,92,92,1) 100%);
+    background: black;
     color: white;
 
 }
@@ -43,16 +43,34 @@ input{
     width: 300px;
 }
 
-button{
+/* button{
     border-radius: 10px !important;
     -webkit-border-radius: 10px !important;
     -moz-border-radius: 10px !important;
     -ms-border-radius: 10px !important;
     -o-border-radius: 10px !important;
-}
-
+} */
 
 td, th{
     color: white;
     font-size: 30px;
 }
+
+#piechart1, piechart2{
+    margin-left: 180px;
+}
+
+@media (max-width: 600px){
+    #piechart1, #piechart2{
+        margin-left: 40px;
+    }
+    td, th{
+        color: white;
+        font-size: 22px;
+        margin: 0px 15px;
+    }
+    h1{
+        font-size: 44px;
+    }
+}
+
