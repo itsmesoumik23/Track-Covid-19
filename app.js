@@ -35,7 +35,7 @@ app.get("/", function(req, res){
                     globalTotalRecovered = globalTotalRecovered + mainData.data[j].recovered
                     j = j+1
                 }
-                console.log(mainData.data.length, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered);
+//                 console.log(mainData.data.length, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered);
                 var i = 0;
                 if (nc !== ""){
                     while (i < 230) {
