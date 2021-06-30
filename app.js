@@ -21,19 +21,14 @@ app.use(express.static("public"))
 app.get("/", function(req, res){
 
     https.get('https://www.trackcorona.live/api/countries', function(response){
-        // var chunks = []
         var Items = ''
-        
         response.on("data", function(data){
             Items += data;
         })
-
         response.on("end", function(){
-            // const body = Buffer.concat(chunks)
             try{
                 var mainData = JSON.parse(Items)
                 var j = 0
-                
                 while (j < 230){
                     globalTotalConfirmed = globalTotalConfirmed + mainData.data[j].confirmed
                     globalTotalDeaths = globalTotalDeaths + mainData.data[j].dead
@@ -41,7 +36,6 @@ app.get("/", function(req, res){
                     j = j+1
                 }
                 console.log(mainData.data.length, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered);
-
                 var i = 0;
                 if (nc !== ""){
                     while (i < 230) {
@@ -57,12 +51,8 @@ app.get("/", function(req, res){
                     i = 0;
                     searchMiss = true;
                 }
-
-                // const countryNewConfirmed = data.Countries[i].NewConfirmed
                 countryTotalConfirmed = mainData.data[i].confirmed
-                // const countryNewDeaths = data.Countries[i].NewDeaths
                 countryTotalDeaths = mainData.data[i].dead
-                // const countryNewRecovered = data.Countries[i].NewRecovered
                 countryTotalRecovered = mainData.data[i].recovered
                 const CN = mainData.data[i].location
                 if (nc !== ""){
@@ -87,10 +77,7 @@ app.get("/", function(req, res){
             } catch (error){
                 const data = Items.toString()
                 console.log(data);
-            }
-            
-
-            
+            } 
 
         })
 
@@ -103,7 +90,6 @@ app.get("/", function(req, res){
 
 app.post("/", function(req, res){
     nc = req.body.InputCountry
-    // console.log(nc);
     res.redirect("/")
 })
 
