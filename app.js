@@ -16,14 +16,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static("public"))
 
-// var options = {
-//     'method': 'GET',
-//     'hostname': 'api.covid19api.com',
-//     'path': '/summary',
-//     'headers': {
-//     },
-//     'maxRedirects': 20
-//   };
 
 
 app.get("/", function(req, res){
