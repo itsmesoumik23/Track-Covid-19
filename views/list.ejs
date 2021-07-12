@@ -48,9 +48,8 @@
 
         chart.draw(CountryData, options2);
       }
+
     </script>
-
-
     
 </head>
 <body>
@@ -90,6 +89,9 @@
             <button class="btn btn-danger" type="submit" name="button">Search</button>
         </form>
         <br>
+    <%    if (flag !== 0){  %>
+                <br><br><br><br><br>
+    <%    }     %>
     <%    if (flag === 0){  %>
         <h3><%=  countryName   %></h3><br>
         <table class="table table-hover">
@@ -110,13 +112,16 @@
                 </div>
             </div>
         </table>
-    <%    }     %>
+    
     </div>
+
     <div class="row">
         <div class="col-lg-6 col-md-12 col-sm-12" id="piechart1" style="width: 600px; height: 600px;"></div>
         <div class="col-lg-6 col-md-12 col-sm-12" id="piechart2" style="width: 600px; height: 600px;"></div>
+        
     </div>
-    
+    <%    }     %>
+
 
     <footer>
     <%    var year = new Date().getFullYear() %>
